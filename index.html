@@ -32,10 +32,10 @@ type="text/css"
 	
 	@supports(padding: max(0px)) {
     #bottom_bar {
-        padding-bottom: max(0px, env(safe-area-inset-right));
+        padding-right: max(0px, env(safe-area-inset-right));
     }
     #top_bar {
-        padding-bottom: max(0px, env(safe-area-inset-left));
+        padding-left: max(0px, env(safe-area-inset-left));
     }
 }
 	
@@ -156,7 +156,7 @@ var truedo = true;
 </script>
 </head>
 <body>
-<div id="wrapper" style="height:97vh;display:flex;flex-flow:column;">
+<div id="wrapper" style="height:90vh;display:flex;flex-flow:column;">
 <div id="top_bar" style="width:100vw; z-index: 1;box-shadow: 0px -5px -5px #888888;z-index: 1;background-color: #33FFBD;flex: 1 1 auto;display:flex">
 	<h1 style="font-size: 85%; color:#768F87"> Click map to see US sales tax jurisdictions and rates sourced from public APIs.</h1>
 </div>
