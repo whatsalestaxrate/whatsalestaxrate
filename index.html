@@ -29,6 +29,14 @@ type="text/css"
 		-ms-text-size-adjust: none; }
 	span {font-family: 'Roboto Mono', monospace;}
 	.mapboxgl-popup-content{background-color: rgba(255, 255, 255, .90);}
+	
+	@supports(padding: max(0px)) {
+    .wrapper {
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+}
+	
+	
 </style>
 </head>
 <script>
