@@ -48,12 +48,10 @@ type="text/css"
 //}
 //Code from Mapbox public documentation & samples and my janky fixes to make this do what I was trying to get it to do.
 $(document).ready(function(){
-var hh = $(document).height();
-var ll = hh - 150;
+var hh = $(document).innerHeight();
+var ll = hh - 10;
 
 $("div[id=bottom_bar]").height(hh-ll);
-
-
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWJveDQiLCJhIjoiY2s2ZWFsNjJpMWl6ZzNucnp6cjk0OTd3YiJ9.bC8QM1grbQDTKPZP-y2Dpg';
 var map = new mapboxgl.Map({
