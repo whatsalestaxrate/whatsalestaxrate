@@ -38,7 +38,11 @@ type="text/css"
         padding-left: max(0px, env(safe-area-inset-left));
     }
 }
-	
+#wrapper{
+height:100vh;
+height:calc(var(--vh,1vh)*100);
+
+}
 	
 </style>
 </head>
@@ -48,10 +52,8 @@ type="text/css"
 //}
 //Code from Mapbox public documentation & samples and my janky fixes to make this do what I was trying to get it to do.
 $(document).ready(function(){
-var hh = $(document).innerHeight();
-var ll = hh - 10;
-
-$("div[id=bottom_bar]").height(hh-ll);
+let vh = window.innerHeight * 0.01;
+document.documentElement.style.setProperty('--vh',`${vh}px`);
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWJveDQiLCJhIjoiY2s2ZWFsNjJpMWl6ZzNucnp6cjk0OTd3YiJ9.bC8QM1grbQDTKPZP-y2Dpg';
 var map = new mapboxgl.Map({
@@ -161,7 +163,7 @@ var truedo = true;
 </script>
 </head>
 <body>
-<div id="wrapper" style="height:100vh;display:flex;flex-flow:column;">
+<div id="wrapper" style="display:flex;flex-flow:column;">
 <div id="top_bar" style="width:100vw; z-index: 1;box-shadow: 0px -5px -5px #888888;z-index: 1;background-color: #33FFBD;flex: 0 1 auto;display:flex;color:#768F87">
 	<h1 style="font-size: 85%;"> Click map to see US sales tax jurisdictions and rates sourced from public APIs. See disclosures before use on <a href='https://github.com/whatsalestaxrate/whatsalestaxrate/blob/master/README.md'>github</a></h1>
 </div>
