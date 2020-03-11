@@ -10,6 +10,7 @@
 
 	gtag('config', 'UA-159955625-1');
 </script>
+<script src="https://cdn.jsdelivr.net/npm/progressbar.js@1.0.1/dist/progressbar.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
 <meta name="keywords" content="Sales Tax, Small Business, Sales Tax Rate, Sales Tax Map">
@@ -37,6 +38,15 @@ type="text/css"
     #top_bar {
         padding-left: max(0px, env(safe-area-inset-left));
     }
+	.progress {
+		height: 40px;
+		width: 40px;
+	}
+	.progress > svg {
+		height: 100%;
+		display: fixed;
+	}
+
 }
 #wrapper{
 height:100vh;
@@ -52,9 +62,17 @@ height:calc(var(--vh,1vh)*100);
 //}
 //Code from Mapbox public documentation & samples and my janky fixes to make this do what I was trying to get it to do.
 $(document).ready(function(){
+	
+
+	
 let vh = window.innerHeight * 0.01;
 document.documentElement.style.setProperty('--vh',`${vh}px`);
 
+$("#top_bar > h1").click(function(){
+	
+	$("#keeptrack").toggle("fast","easing");
+	
+});
 mapboxgl.accessToken = 'pk.eyJ1IjoibWJveDQiLCJhIjoiY2s2ZWFsNjJpMWl6ZzNucnp6cjk0OTd3YiJ9.bC8QM1grbQDTKPZP-y2Dpg';
 var map = new mapboxgl.Map({
 container: 'map', // container id
@@ -119,43 +137,59 @@ placeholder: 'Address or Lat,Long',
 mapboxgl: mapboxgl
 }),'top-left'
 );
-var truedo = true;
-
-	map.on('click', function(e) {
-	if (truedo) {
+var counter = 0;
+map.on('click', function(e) {
+	
+	counter++;
 	var coordinates = e.lngLat;
 	var lat = e.lngLat.lat;
 	var longi = e.lngLat.lng;
 	var description = e.description;
-	$.get("https://api.mapbox.com/geocoding/v5/mapbox.places/"+longi+","+lat+".json",{access_token: mapboxgl.accessToken}, function(result2,status2){
-		$("span[id=resultspan]").append(result2.features[0].place_name)
-		$("span[id=resultspan]").append('<br>')
-	});
-	$.post("https://www.avalara.com/taxrates/en/state-rates/api/getRateForAddress/", {latitude: lat, longitude: longi} , function(result, status){
-		var i;
-		$("span[id=resultspan]").append('<br>')
-		var running_sum = 0;
-		for (i=0;i < result.summary.length; i++){
-			running_sum += result.summary[i].rate*100;
-			$("span[id=resultspan]").append("<li>"+result.summary[i].jurisName+"="+(result.summary[i].rate*100).toFixed(3)+"%</li>"); 
-	}
-		$("span[id=resultspan]").append("Total ="+running_sum.toFixed(3)+"%</li><br>");
-		$("span[id=resultspan]").append("Lat: ",lat.toFixed(3)," Long: ",longi.toFixed(3));
-		$("span[id=resultspan]").append("<hr>Wait 10 seconds for next request. ");
-	});
-		truedo = false;
-		$("div[class=mapboxgl-map]").css("pointer-events", "none");
 
-		
-		setTimeout(function(){truedo = true;$("div[class=mapboxgl-map]").css("pointer-events", "auto");$("span[id=resultspan]").append(String.fromCharCode(0x2705));}, 10000);
-	
 	new mapboxgl.Popup()
 	.setLngLat(coordinates)
-	.setHTML("<span id='resultspan'></span>")
+	.setHTML("<div id='progress' class='progress'></div>")
 	.addTo(map);
+	var circle = new ProgressBar.Circle('#progress', {
+		color: '#FCB03C',
+		duration: 9999,
+		easing: 'easeInOut',
+		color: 'blue',
+		strokeWidth: 6
+	});
 
-
-	}
+	circle.animate(1);
+	setTimeout(function(){
+		$("#progress").remove();
+		$.get("https://api.mapbox.com/geocoding/v5/mapbox.places/"+longi+","+lat+".json",{access_token: mapboxgl.accessToken}, function(result2,status2){
+			$("#resultspan").append(result2.features[0].place_name)
+			$("#resultspan").append('<br>')
+		});
+		$.post("https://www.avalara.com/taxrates/en/state-rates/api/getRateForAddress/", {latitude: lat, longitude: longi} , function(result, status){
+			var i;
+			$("#resultspan").append('<br>')
+			var running_sum = 0;
+			for (i=0;i < result.summary.length; i++){
+				running_sum += result.summary[i].rate*100;
+				$("#resultspan").append("<li>"+result.summary[i].jurisName+"="+(result.summary[i].rate*100).toFixed(3)+"%</li>"); 
+			}
+			$("#resultspan").append("Total ="+running_sum.toFixed(3)+"%</li><br>");
+			$("#resultspan").append("Lat: ",lat.toFixed(3)," Long: ",longi.toFixed(3));
+			$("#resultspan").append("<br>")
+			$("#keeptrack").append($("#resultspan").html());
+			$("#keeptrack").append("<hr>");	
+		});
+		
+		new mapboxgl.Popup()
+			.setHTML("<span id='resultspan'></span>")
+			.setLngLat(coordinates)
+			.addTo(map)
+		
+			
+	}, 10000);
+	
+	
+	
 });
 
   });
@@ -168,7 +202,7 @@ var truedo = true;
 	<h1 style="font-size: 85%;"> Click map to see US sales tax jurisdictions and rates sourced from public APIs. See disclosures before use on <a href='https://github.com/whatsalestaxrate/whatsalestaxrate/blob/master/README.md'>github</a></h1>
 </div>
 <div id="map" style="height:100%;width:100vw; z-index: 0;flex: 1 1 auto"> </div>
-<div id="bottom_bar" style="flex: 0 1 auto;color:#768F87;display:flex;"></div>
+<div id="bottom_bar" style="flex: 0 1 auto;color:#768F87;display:flex;"><span id="keeptrack" style="display:none;"></span></div>
 </div>
 
 </body>
