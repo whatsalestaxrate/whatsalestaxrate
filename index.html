@@ -163,7 +163,7 @@ map.on('click', function(e) {
 		$.get("https://api.mapbox.com/geocoding/v5/mapbox.places/"+longi+","+lat+".json",{access_token: mapboxgl.accessToken}, function(result2,status2){
 			$("#resultspan").append(result2.features[0].place_name);
 			$("#resultspan").append('<br>');
-			$("#resultspan").append(lat,longi);
+			$("#resultspan").append(lat,",",longi);
 			$("#resultspan").append('<br>');
 			var urlBuilder = "https://www.avalara.com/bin/avalara/taxratesavataxapi?latitude="+lat+"&longitude="+longi;
 			$("#resultspan").append('<a href='+urlBuilder+' target="_blank">API Link</a>');
