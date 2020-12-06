@@ -179,7 +179,7 @@ map.on('click', function(e) {
 			$("#resultspan").append(result2.features[0].place_name)
 			$("#resultspan").append('<br>')
 		});
-		$.post("https://www.avalara.com/taxrates/en/state-rates/api/getRateForAddress/", {latitude: lat, longitude: longi} , function(result, status){
+		$.post("https://www.avalara.com/bin/avalara/taxratesavataxapi/", {latitude: lat, longitude: longi} , function(result, status){
 			var i;
 			$("#resultspan").append('<br>')
 			var running_sum = 0;
