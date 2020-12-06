@@ -172,35 +172,21 @@ map.on('click', function(e) {
 		strokeWidth: 6
 	});
 
-	circle.animate(1);
-	setTimeout(function(){
-		$("#progress").remove();
+//	circle.animate(1);
+//		$("#progress").remove();
 		$.get("https://api.mapbox.com/geocoding/v5/mapbox.places/"+longi+","+lat+".json",{access_token: mapboxgl.accessToken}, function(result2,status2){
-			$("#resultspan").append(result2.features[0].place_name)
-			$("#resultspan").append('<br>')
-		});
-		$.get("https://www.avalara.com/bin/avalara/taxratesavataxapi?latitude="+lat+"&longitude="+longi,function(result, status){
-			var i;
-			$("#resultspan").append('<br>')
-			var running_sum = 0;
-			for (i=0;i < result.summary.length; i++){
-				running_sum += result.summary[i].rate*100;
-				$("#resultspan").append("<li>"+result.summary[i].jurisName+"="+(result.summary[i].rate*100).toFixed(3)+"%</li>"); 
-			}
-			$("#resultspan").append("Total ="+running_sum.toFixed(3)+"%</li><br>");
-			$("#resultspan").append("Lat: ",lat.toFixed(3)," Long: ",longi.toFixed(3));
-			$("#resultspan").append("<br>")
-			$("#keeptrack").append($("#resultspan").html());
-			$("#keeptrack").append("<hr>");	
-		});
+			$("#resultspan").append(result2.features[0].place_name);
+			$("#resultspan").append('<br>');
+			var urlBuilder = "https://www.avalara.com/bin/avalara/taxratesavataxapi?latitude="+lat+"&longitude="+longi;
+			$("#resultspan").append('<a href='+urlBuilder+' target="_blank">API Link</a>');
+			console.log(urlBuilder);
 		
+			
+		});
 		new mapboxgl.Popup()
 			.setHTML("<span id='resultspan'></span>")
 			.setLngLat(coordinates)
 			.addTo(map)
-		
-			
-	}, 10000);
 	
 	
 	
