@@ -10,10 +10,9 @@
 
 	gtag('config', 'UA-159955625-1');
 </script>
-<!--<script src="https://cdn.jsdelivr.net/npm/progressbar.js@1.0.1/dist/progressbar.min.js"></script>-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
-<meta name="keywords" content="Sales Tax, Small Business, Sales Tax Rate, Sales Tax Map">
+<meta name="keywords" content="Sales Tax, Small Business, Sales Tax Rate, Sales Tax Map, Shipping, Drop Ship, United States">
 <title>What Sales Tax Rate - Map</title>
 <meta name="description" content="Sales Tax Rate Map">
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
@@ -163,12 +162,7 @@ map.on('click', function(e) {
 		var urlBuilder = "https://www.avalara.com/bin/avalara/taxratesavataxapi?latitude="+lat+"&longitude="+longi;
 		$.post("https://turnkey-resolver.herokuapp.com/turnkey", {url: urlBuilder})
 		.done(function(result){
-			//				console.log(result);
 			$("#resultspan").append(result2.features[0].place_name);
-			//				$("#resultspan").append('<br>');
-			//				$("#resultspan").append("Lat: " + lat);
-			//				$("#resultspan").append('<br>');
-			//				$("#resultspan").append("Long: " + longi);
 			var i;
 			$("#resultspan").append('<br>')
 			var running_sum = 0;
