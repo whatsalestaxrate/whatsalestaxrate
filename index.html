@@ -164,6 +164,7 @@ map.on('click', function(e) {
 		var urlBuilder = "https://www.avalara.com/bin/avalara/taxratesavataxapi?latitude="+lat+"&longitude="+longi;
 		$.post("https://turnkey-resolver.herokuapp.com/turnkey", {url: urlBuilder})
 		.done(function(result){
+
 			$("#resultspan").append(result2.features[0].place_name);
 
 			var i;
@@ -179,6 +180,7 @@ map.on('click', function(e) {
 			$("#keeptrack").append($("#resultspan").html());
 			$("#keeptrack").append("<hr>");	
 		});
+	});
 		
 		new mapboxgl.Popup()
 			.setHTML("<span id='resultspan'></span>")
@@ -204,3 +206,4 @@ map.on('click', function(e) {
 
 </body>
 </html>
+	
