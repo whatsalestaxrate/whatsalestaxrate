@@ -171,7 +171,7 @@ map.on('click', function(e) {
 				$("#resultspan").append("<li>"+result.summary[i].jurisName+"="+(result.summary[i].taxCalculated).toFixed(3)+"%</li>"); 
 			}
 			$("#resultspan").append("Total ="+running_sum.toFixed(3)+"%</li><br>");
-			$("#resultspan").append("Lat: ",lat.toFixed(3)," Long: ",longi.toFixed(3));
+			$("#resultspan").append("Lat: ",lat.toFixed(5)," Long: ",longi.toFixed(5));
 			$("#resultspan").append("<br>")
 			$("#keeptrack").append($("#resultspan").html());
 			$("#keeptrack").append("<hr>");	
