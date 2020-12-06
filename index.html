@@ -165,7 +165,6 @@ map.on('click', function(e) {
 			$("#resultspan").append('<br>');
 			var urlBuilder = "https://www.avalara.com/bin/avalara/taxratesavataxapi?latitude="+lat+"&longitude="+longi;
 			$("#resultspan").append('<a href='+urlBuilder+' target="_blank">API Link</a>');
-			console.log(urlBuilder);
 			$("#keeptrack").append($("#resultspan").html());
 			$("#keeptrack").append("<br>");	
 			
