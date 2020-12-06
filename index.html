@@ -160,20 +160,6 @@ map.on('click', function(e) {
 	var longi = e.lngLat.lng;
 	var description = e.description;
 
-	new mapboxgl.Popup()
-	.setLngLat(coordinates)
-	.setHTML("<div id='progress' class='progress'></div>")
-	.addTo(map);
-	var circle = new ProgressBar.Circle('#progress', {
-		color: '#FCB03C',
-		duration: 9999,
-		easing: 'easeInOut',
-		color: 'blue',
-		strokeWidth: 6
-	});
-
-//	circle.animate(1);
-//		$("#progress").remove();
 		$.get("https://api.mapbox.com/geocoding/v5/mapbox.places/"+longi+","+lat+".json",{access_token: mapboxgl.accessToken}, function(result2,status2){
 			$("#resultspan").append(result2.features[0].place_name);
 			$("#resultspan").append('<br>');
