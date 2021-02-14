@@ -65,12 +65,13 @@ $(window).on('resize',function(){
 let vh = window.innerHeight * 0.01;
 document.documentElement.style.setProperty('--vh',`${vh}px`);
 
-$("#map").css('margin-top',$("#menu").height());
-$("#map").css('height',$("#map").height()-$("#menu").height());
+
+
 
 
 });
-
+$("#map").css('margin-top',$("#menu").height());
+$("#map").css('height',$("#map").height()-$("#menu").height());
 
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWJveDQiLCJhIjoiY2s2ZWFsNjJpMWl6ZzNucnp6cjk0OTd3YiJ9.bC8QM1grbQDTKPZP-y2Dpg';
