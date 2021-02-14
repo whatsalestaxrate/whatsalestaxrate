@@ -67,6 +67,7 @@ document.documentElement.style.setProperty('--vh',`${vh}px`);
 });
 
 $("#map").css('margin-top',$("#menu").height());
+$("#map").css('height',$("#map").height()-$("#menu").height());
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWJveDQiLCJhIjoiY2s2ZWFsNjJpMWl6ZzNucnp6cjk0OTd3YiJ9.bC8QM1grbQDTKPZP-y2Dpg';
 var map = new mapboxgl.Map({
@@ -183,7 +184,7 @@ map.on('click', function(e) {
 			<a class="inverted item inactive" href='https://github.com/whatsalestaxrate/whatsalestaxrate/blob/master/README.md' target="_blank">Github Source & Disclosures</a>
 		</div>
 		
-		<div id="map" class="" style="height:100%;overflow-y: hidden;margin-bottom: -40px;"></div>
+		<div id="map" class="" style="height:100%;overflow-y: hidden;"></div>
 		
 	</div>
 		
