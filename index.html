@@ -28,7 +28,7 @@ href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapb
 type="text/css"
 />
 <style>
-	body { margin: 0; padding: 0; background-color: #33FFBD; font-family: 'Sen', sans-serif; -webkit-text-size-adjust: 100%;
+	body { margin: 0; padding: 0; background-color: #000000; font-family: 'Sen', sans-serif; -webkit-text-size-adjust: 100%;
 		-ms-text-size-adjust: none;overflow: hidden;}
 	span {font-family: 'Roboto Mono', monospace;}
 	.mapboxgl-popup-content{background-color: rgba(255, 255, 255, .90);}
@@ -44,6 +44,22 @@ height:calc(var(--vh,1vh)*100);
 	
 height:calc(var(--vh,1vh)*100);	
 	
+}
+#dbuttontext{
+	-moz-user-select: text;
+	-khtml-user-select: text;
+	-webkit-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+	
+}
+#dbutton{
+	-moz-user-select: text;
+	-khtml-user-select: text;
+	-webkit-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+		
 }
 	
 </style>
@@ -73,12 +89,24 @@ $("#map").css('height',window.innerHeight-$("#menu").height());
 	
 $("#map").css('margin-top',$("#menu").height());
 $("#map").css('height',window.innerHeight-$("#menu").height());
-
+$("#dbutton").click(function(){
+	
+	$("#dbuttontext").text("3GatDHEN5Rwxzj3vf565DsndZb9SXy1KiT");
+	var dtext = $("#dbuttontext").text();
+	console.log(dtext);
+	dtext.select();
+	document.execCommand("copy");
+	
+	
+	
+	
+	
+});
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWJveDQiLCJhIjoiY2s2ZWFsNjJpMWl6ZzNucnp6cjk0OTd3YiJ9.bC8QM1grbQDTKPZP-y2Dpg';
 var map = new mapboxgl.Map({
 container: 'map', // container id
-style: 'mapbox://styles/mapbox/streets-v11',
+style: 'mapbox://styles/mapbox/satellite-v9',
 center: [-98.5795, 39.8283], // starting position
 zoom: 4 // starting zoom
 });
@@ -191,24 +219,26 @@ map.on('click', function(e) {
 				
 				<a class="item active ">Sales Tax Map</a>
 				<a class="item" href='https://github.com/whatsalestaxrate/whatsalestaxrate/blob/master/README.md' target="_blank">Github Source & Disclosures</a>
-				<div class="right floated label item">
-					<a class="right floated ui blue image label">
-						<i class="bitcoin icon"></i>
-						<div class="detail">3GatDHEN5Rwxzj3vf565DsndZb9SXy1KiT</div>
-					</a>
+				<div id="dbutton" class="right floated item" style="user-select:text;"><button class="right floated ui positive button" style="-webkit-touch-callout: text;
+-webkit-user-select: text;
+-khtml-user-select: text;
+-moz-user-select: text;
+-ms-user-select: text;
+user-select: text;">
 					
-				</div>
+					<i class="bitcoin icon"></i><b class="text" id="dbuttontext" style="-webkit-touch-callout: text;
+-webkit-user-select: text;
+-khtml-user-select: text;
+-moz-user-select: text;
+-ms-user-select: text;
+user-select: text;">Donate</b>
+					
+					
+				</button></div>
 				
-				
-			</div>
+			</div>			
 			
-			
-			
-			
-			
-			
-			
-			</div>
+		</div>
 		
 		<div id="map" class="" style="height:100%;overflow-y: hidden;"></div>
 		
