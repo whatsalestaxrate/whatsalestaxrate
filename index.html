@@ -6,8 +6,6 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous"></script>
-	
-<!--<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ivandiazwm/coinwidget@0.1.1/builds/full.js" charset="utf-8"></script>-->
 <script>
 	window.dataLayer = window.dataLayer || [];
 	function gtag(){dataLayer.push(arguments);}
@@ -31,37 +29,15 @@ type="text/css"
 />
 <style>
 	body { margin: 0; padding: 0; background-color: #33FFBD; font-family: 'Sen', sans-serif; -webkit-text-size-adjust: 100%;
-		-ms-text-size-adjust: none;}
+		-ms-text-size-adjust: none;overflow: hidden;}
 	span {font-family: 'Roboto Mono', monospace;}
 	.mapboxgl-popup-content{background-color: rgba(255, 255, 255, .90);}
 	
-	@supports(padding: max(0px)) {
-    #bottom_bar {
-        padding-right: max(0px, env(safe-area-inset-right));
-    }
-    #top_bar {
-        padding-left: max(0px, env(safe-area-inset-left));
-    }
-	.progress {
-		height: 5vh;
-		width: 5vh;
-	}
-	.progress > svg {
-		height: 5vh;
-		display: fixed;
-	}
-	
 
-}
 #wrapper{
 height:100vh;
 height:calc(var(--vh,1vh)*100);
 
-}
-
-#bottom_bar{
-	max-height: 25%;
-	
 }
 
 #map{
@@ -92,11 +68,6 @@ document.documentElement.style.setProperty('--vh',`${vh}px`);
 
 $("#map").css('margin-top',$("#menu").height());
 
-$("#top_bar > h1").click(function(){
-	
-	$("#keeptrack").toggle("fast","swing");
-	
-});
 mapboxgl.accessToken = 'pk.eyJ1IjoibWJveDQiLCJhIjoiY2s2ZWFsNjJpMWl6ZzNucnp6cjk0OTd3YiJ9.bC8QM1grbQDTKPZP-y2Dpg';
 var map = new mapboxgl.Map({
 container: 'map', // container id
@@ -207,12 +178,12 @@ map.on('click', function(e) {
 
 	<div id="wrapper">
 		
-		<div id="menu" class= "ui inverted fixed menu" style="">
+		<div id="menu" class= "ui inverted fixed menu" style="overflow-y: hidden;">
 			<a class="inverted item active ">Sales Tax Map</a>
 			<a class="inverted item inactive" href='https://github.com/whatsalestaxrate/whatsalestaxrate/blob/master/README.md' target="_blank">Github Source & Disclosures</a>
 		</div>
 		
-		<div id="map" class="" style="height:100vw;"></div>
+		<div id="map" class="" style="height:100%;overflow-y: hidden;"></div>
 		
 	</div>
 		
