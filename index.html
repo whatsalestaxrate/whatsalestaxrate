@@ -53,7 +53,7 @@ type="text/css"
 	
 
 }
-#mapper{
+#wrapper{
 height:100vh;
 height:calc(var(--vh,1vh)*100);
 
@@ -61,6 +61,12 @@ height:calc(var(--vh,1vh)*100);
 
 #bottom_bar{
 	max-height: 25%;
+	
+}
+
+#map{
+	
+height:calc(var(--vh,1vh)*100);	
 	
 }
 	
@@ -84,7 +90,7 @@ let vh = window.innerHeight * 0.01;
 document.documentElement.style.setProperty('--vh',`${vh}px`);
 });
 
-
+$("#map").css('margin-top',$("#menu").height());
 
 $("#top_bar > h1").click(function(){
 	
@@ -198,11 +204,17 @@ map.on('click', function(e) {
 </script>
 </head>
 <body>
-<div class= "ui inverted fixed menu wrapper" style="position:sticky">
-	<a class="inverted item active">Sales Tax Map</a>
-	<a class="inverted item inactive" href='https://github.com/whatsalestaxrate/whatsalestaxrate/blob/master/README.md' target="_blank">Github Source & Disclosures</a></div>
-<!--</div>-->
 
-<div id="map" class="mapper container" style="height:100%;flex: 1 1 auto"></div>
+	<div id="wrapper">
+		
+		<div id="menu" class= "ui inverted fixed menu" style="">
+			<a class="inverted item active ">Sales Tax Map</a>
+			<a class="inverted item inactive" href='https://github.com/whatsalestaxrate/whatsalestaxrate/blob/master/README.md' target="_blank">Github Source & Disclosures</a>
+		</div>
+		
+		<div id="map" class="" style="height:100vw;"></div>
+		
+	</div>
+		
 </body>
 </html>
