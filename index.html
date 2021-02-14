@@ -3,7 +3,11 @@
 <head>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159955625-1"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ivandiazwm/coinwidget@0.1.1/builds/full.js" charset="utf-8"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous"></script>
+	
+<!--<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ivandiazwm/coinwidget@0.1.1/builds/full.js" charset="utf-8"></script>-->
 <script>
 	window.dataLayer = window.dataLayer || [];
 	function gtag(){dataLayer.push(arguments);}
@@ -48,7 +52,7 @@ type="text/css"
 	}
 
 }
-#wrapper{
+#mapper{
 height:100vh;
 height:calc(var(--vh,1vh)*100);
 
@@ -193,15 +197,14 @@ map.on('click', function(e) {
 </script>
 </head>
 <body>
-<div id="wrapper" style="display:flex;flex-flow:column;">
-<div id="top_bar" style="width:100vw; z-index: 1;box-shadow: 0px -5px -5px #888888;z-index: 1;background-color: #33FFBD;flex: 0 1 auto;display:flex;color:#768F87">
-	<h1 style="font-size: 85%;"> Click map to see US sales tax jurisdictions and rates sourced from public APIs. See disclosures before use on <a href='https://github.com/whatsalestaxrate/whatsalestaxrate/blob/master/README.md'>github</a><div id="coinwidget" data-icon="true" data-type="primary" data-wallet="3519yqqqTcCfEEAFzRF7pEUEEBvCcxw8cJ"></div></h1>
-	
+<div class= "ui inverted fixed menu">
+	<a class="inverted item active">Sales Tax Map</a>
+	<a class="inverted item inactive" href='https://github.com/whatsalestaxrate/whatsalestaxrate/blob/master/README.md' target="_blank">Github Source & Disclosures</a>
 	
 </div>
-<div id="map" style="height:100%;width:100vw; z-index: 0;flex: 1 1 auto"> </div>
-<div id="bottom_bar" style="flex: 0 1 auto;color:#768F87;display:flex;"><span id="keeptrack" style="display:none;"></span></div>
-</div>
+<!--</div>-->
+
+<div id="map" class="ui fluid container" class="mapper" style="height:100%;margin-top: 38px;"></div>
 
 </body>
 </html>
