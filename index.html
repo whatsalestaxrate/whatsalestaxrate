@@ -13,6 +13,7 @@
 
 	gtag('config', 'UA-159955625-1');
 </script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ivandiazwm/coinwidget@0.1.1/builds/full.js" charset="utf-8"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
 <meta name="keywords" content="Sales Tax, Small Business, Sales Tax Rate, Sales Tax Map, Shipping, Drop Ship, United States">
@@ -89,19 +90,6 @@ $("#map").css('height',window.innerHeight-$("#menu").height());
 	
 $("#map").css('margin-top',$("#menu").height());
 $("#map").css('height',window.innerHeight-$("#menu").height());
-$("#dbutton").click(function(){
-	
-	$("#dbuttontext").text("3GatDHEN5Rwxzj3vf565DsndZb9SXy1KiT");
-	var dtext = $("#dbuttontext").text();
-	console.log(dtext);
-	dtext.select();
-	document.execCommand("copy");
-	
-	
-	
-	
-	
-});
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWJveDQiLCJhIjoiY2s2ZWFsNjJpMWl6ZzNucnp6cjk0OTd3YiJ9.bC8QM1grbQDTKPZP-y2Dpg';
 var map = new mapboxgl.Map({
@@ -219,22 +207,8 @@ map.on('click', function(e) {
 				
 				<a class="item active ">Sales Tax Map</a>
 				<a class="item" href='https://github.com/whatsalestaxrate/whatsalestaxrate/blob/master/README.md' target="_blank">Github Source & Disclosures</a>
-				<div id="dbutton" class="right floated item" style="user-select:text;"><button class="right floated ui positive button" style="-webkit-touch-callout: text;
--webkit-user-select: text;
--khtml-user-select: text;
--moz-user-select: text;
--ms-user-select: text;
-user-select: text;">
-					
-					<i class="bitcoin icon"></i><b class="text" id="dbuttontext" style="-webkit-touch-callout: text;
--webkit-user-select: text;
--khtml-user-select: text;
--moz-user-select: text;
--ms-user-select: text;
-user-select: text;">Donate</b>
-					
-					
-				</button></div>
+				<div class="right floated item" id="coinwidget" data-icon="true" data-wallet="3A2Lf2ZDREQMMuwqGfAYeTqDdDXiCDaUby" data-type="primary" data-text="Donate"></div>
+
 				
 			</div>			
 			
