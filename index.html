@@ -166,7 +166,7 @@ map.on('click', function(e) {
 	var description = e.description;
 	
 	$.get("https://api.mapbox.com/geocoding/v5/mapbox.places/"+longi+","+lat+".json",{access_token: mapboxgl.accessToken}, function(result2,status2){
-		var urlBuilder = "https://www.avalara.com/bin/avalara/taxratesavataxapi?latitude="+lat+"&longitude="+longi;
+		var urlBuilder = "https://www.avalara.com/ava-servlets/servletpage/jcr:content.taxratesavataxapi.json?latitude="+lat+"&longitude="+longi;
 		$.post("https://turnkey-resolver.herokuapp.com/turnkey", {url: urlBuilder})
 		.done(function(result){
 			$("#resultspan").append(result2.features[0].place_name);
