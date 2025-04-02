@@ -11,8 +11,8 @@
 
     <!-- CSS Dependencies -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-    <link href="https://api.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.css" rel="stylesheet" /> <!-- Updated Mapbox Version -->
-    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css" /> <!-- Updated Geocoder Version -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.css" rel="stylesheet" /> <!-- Consider updating Mapbox Version periodically -->
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css" /> <!-- Consider updating Geocoder Version periodically -->
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Sen&display=swap" rel="stylesheet">
 
     <!-- Google Analytics (Async) -->
@@ -37,7 +37,7 @@
             padding: 0;
             overflow: hidden; /* Prevent scrollbars on the body */
             font-family: 'Sen', sans-serif;
-            background-color: #f4f4f4; /* Lighter background for less harsh contrast */
+            background-color: #f4f4f4; /* Lighter background */
             -webkit-text-size-adjust: 100%;
             -ms-text-size-adjust: none;
         }
@@ -51,6 +51,7 @@
 
         #menu {
             flex-shrink: 0; /* Prevent menu from shrinking */
+            z-index: 1000; /* Ensure menu stays on top of map controls */
             /* Semantic UI handles fixed positioning and styling */
         }
 
@@ -70,17 +71,21 @@
 
         /* Style popups */
         .mapboxgl-popup-content {
-            background-color: rgba(255, 255, 255, .95); /* Slightly less transparent */
+            background-color: rgba(255, 255, 255, .95);
             padding: 15px;
             box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
             border-radius: 4px;
             font-family: 'Sen', sans-serif;
+            max-width: 300px; /* Prevent popups from becoming too wide */
+            overflow-y: auto; /* Add scroll if content exceeds max height */
+            max-height: 250px; /* Limit popup height */
         }
 
         .mapboxgl-popup-content h4 {
             margin: 0 0 10px 0;
             font-weight: bold;
             color: #333;
+            font-size: 1.1em;
         }
 
         .mapboxgl-popup-content ul {
@@ -111,25 +116,46 @@
             color: #555;
             margin-top: 10px;
         }
+        .mapboxgl-popup-content em { /* Style loading text */
+            color: #666;
+        }
+        .mapboxgl-popup-content p { /* Style error messages */
+             color: #a94442; /* Bootstrap danger text color */
+             margin-bottom: 10px;
+        }
 
-        /* Style the log area if needed (currently hidden/unused in this refactor) */
-        /* #keeptrack { ... } */
+
+        /* Style adjustments for controls under fixed menu */
+        .mapboxgl-ctrl-top-left {
+            /* Add margin to push controls below the fixed menu */
+            /* Adjust 50px based on actual menu height if needed */
+            margin-top: 50px;
+            margin-left: 10px; /* Add some left margin too */
+        }
 
         /* Geocoder styling */
         .mapboxgl-ctrl-geocoder {
              font-size: 14px;
-             max-width: none;
-             width: 100%;
+             max-width: 300px; /* Limit width */
+             width: auto; /* Allow it to shrink */
              border: 1px solid #ccc;
-             box-shadow: none;
+             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+             border-radius: 4px;
         }
         .mapboxgl-ctrl-geocoder input[type='text'] {
             height: 38px; /* Match Semantic UI input height */
-            padding: 0 10px;
+            padding: 0 35px 0 10px; /* Adjust padding for icon */
         }
         .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--icon-search {
             top: 9px; /* Adjust icon position */
+            left: auto;
+            right: 10px;
         }
+         .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--button {
+             /* Style clear button if needed */
+             top: 9px;
+             right: 10px;
+         }
 
     </style>
 </head>
@@ -142,26 +168,21 @@
                 <span class="item active">Sales Tax Map</span> <!-- Use span if not a link -->
                 <a class="item" href='https://github.com/whatsalestaxrate/whatsalestaxrate/blob/master/README.md' target="_blank" rel="noopener noreferrer">GitHub Source & Disclosures</a>
                 <!-- Add rel="noopener noreferrer" for security on target="_blank" -->
-                <!-- Coinwidget removed as commented out in original -->
             </div>
         </div>
 
-        <!-- Use a container for the map to handle layout relative to the menu -->
+        <!-- Map container handles layout relative to the menu -->
         <div id="map-container">
              <div id="map"></div>
         </div>
 
-        <!-- Keep track div (Optional - currently not used in popup logic, maybe for a separate log?) -->
-        <!-- <div id="keeptrack" style="display: none;"></div> -->
-
     </div><!-- /#wrapper -->
 
-    <!-- JavaScript Dependencies (Load at the end) -->
+    <!-- JavaScript Dependencies (Load at the end for performance) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script> <!-- Updated Mapbox Version -->
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script> <!-- Updated Geocoder Version -->
-    <!-- Coinwidget script removed -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script> <!-- Match CSS version -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script> <!-- Match CSS version -->
 
     <!-- Main Application Logic -->
     <script>
@@ -169,9 +190,12 @@
         document.addEventListener('DOMContentLoaded', () => {
 
             // --- Configuration ---
-            const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibWJveDQiLCJhIjoiY2s2ZWFsNjJpMWl6ZzNucnp6cjk0OTd3YiJ9.bC8QM1grbQDTKPZP-y2Dpg'; // Keep token here or move to env variable for build process
-            const TAX_API_PROXY_URL = "https://turnkey-resolver.onrender.com/turnkey"; // Proxy URL to avoid CORS and hide potential target API keys
+            const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibWJveDQiLCJhIjoiY2s2ZWFsNjJpMWl6ZzNucnp6cjk0OTd3YiJ9.bC8QM1grbQDTKPZP-y2Dpg'; // Replace with your token if different
+            const TAX_API_PROXY_URL = "https://turnkey-resolver.onrender.com/turnkey"; // Your proxy URL
             const AVALARA_TAX_URL_BASE = "https://avatax-prod.avlr.net/avalara/avatax/getresponse"; // Base URL for the tax service
+
+             // --- State Variable ---
+            let activePopup = null; // Variable to hold the currently active popup instance
 
             // --- Helper Functions ---
 
@@ -189,13 +213,17 @@
                 if (taxData && taxData.summary && taxData.summary.length > 0) {
                     popupHtml += `<ul>`;
                     taxData.summary.forEach(item => {
-                        const taxRate = parseFloat(item.taxCalculated) || 0; // Ensure it's a number
+                        const taxRate = parseFloat(item.taxCalculated) || 0;
                         running_sum += taxRate;
                         popupHtml += `<li><span class="tax-jurisdiction">${item.jurisName}:</span> <span class="tax-rate">${taxRate.toFixed(3)}%</span></li>`;
                     });
                     popupHtml += `</ul>`;
                     popupHtml += `<div class="tax-total">Total: <span class="tax-rate">${running_sum.toFixed(3)}%</span></div>`;
-                } else {
+                } else if (taxData && taxData.messages && taxData.messages.length > 0) {
+                     // Handle potential API messages (e.g., "Address is incomplete")
+                     popupHtml += `<p>${taxData.messages[0].summary || 'Could not determine tax rate.'}</p>`;
+                }
+                 else {
                     popupHtml += `<p>No tax summary data found for this location.</p>`;
                 }
 
@@ -203,194 +231,153 @@
                 return popupHtml;
             };
 
-            // Function to handle coordinate input in geocoder (from original code)
+            // Function to handle coordinate input in geocoder
             const coordinatesGeocoder = (query) => {
-                // match anything which looks like a decimal degrees coordinate pair
                 const matches = query.match(
                     /^[ ]*(?:Lat: )?(-?\d+\.?\d*)[, ]+(?:Lng: )?(-?\d+\.?\d*)[ ]*$/i
                 );
-                if (!matches) {
-                    return null;
-                }
+                if (!matches) return null;
+
                 function coordinateFeature(lng, lat) {
+                    // Basic validation: lat must be between -90 and 90, lng between -180 and 180
+                    if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+                        return null; // Invalid coordinates
+                    }
                     return {
                         center: [lng, lat],
                         geometry: { type: 'Point', coordinates: [lng, lat] },
-                        place_name: 'Lat: ' + lat + ' Lng: ' + lng,
+                        place_name: `Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`, // Consistent formatting
                         place_type: ['coordinate'],
                         properties: {},
                         type: 'Feature'
                     };
                 }
+
                 const coord1 = Number(matches[1]);
                 const coord2 = Number(matches[2]);
                 const geocodes = [];
-                // Assume lng, lat if first coord is outside lat bounds
-                if (coord1 < -180 || coord1 > 180 || coord2 < -90 || coord2 > 90) {
-                     // Basic validation if coords look like lat/lon
-                     if (coord1 >= -90 && coord1 <= 90 && coord2 >= -180 && coord2 <= 180) {
-                         // Guessing coord1 is lat, coord2 is lng
-                         geocodes.push(coordinateFeature(coord2, coord1));
-                     }
-                      if (coord2 >= -90 && coord2 <= 90 && coord1 >= -180 && coord1 <= 180) {
-                         // Guessing coord1 is lng, coord2 is lat
-                         geocodes.push(coordinateFeature(coord1, coord2));
-                    }
-                } else {
-                    // If numbers are within standard ranges, could be either way
-                     geocodes.push(coordinateFeature(coord1, coord2)); // lng, lat
-                     geocodes.push(coordinateFeature(coord2, coord1)); // lat, lng
+
+                // Try interpreting as Lng, Lat
+                const featureLngLat = coordinateFeature(coord1, coord2);
+                if (featureLngLat) geocodes.push(featureLngLat);
+
+                // Try interpreting as Lat, Lng (if different from first interpretation)
+                const featureLatLng = coordinateFeature(coord2, coord1);
+                 // Avoid adding duplicate points if coord1 === coord2 within valid ranges
+                if (featureLatLng && (coord1 !== coord2 || !featureLngLat)) {
+                   geocodes.push(featureLatLng);
                 }
 
-                return geocodes;
+                return geocodes.length > 0 ? geocodes : null;
             };
 
 
             // --- Initialization ---
+            calculateVh(); // Initial calculation
 
-            // Initial VH calculation
-            calculateVh();
-
-            // Mapbox Setup
             mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
             const map = new mapboxgl.Map({
-                container: 'map', // container id
-                style: 'mapbox://styles/mapbox/satellite-streets-v11', // Consider other styles like 'streets-v11' if satellite isn't needed
-                center: [-98.5795, 39.8283], // USA center
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v11', // Changed to streets - satellite can be slow
+                center: [-98.5795, 39.8283],
                 zoom: 4
             });
 
             // --- Map Controls ---
-            map.addControl(new mapboxgl.NavigationControl());
+            map.addControl(new mapboxgl.NavigationControl()); // Zoom/compass
             map.addControl(
-                new mapboxgl.GeolocateControl({
+                new mapboxgl.GeolocateControl({ // User location
                     positionOptions: { enableHighAccuracy: true },
                     trackUserLocation: true
                 })
             );
-            map.addControl(
-                new MapboxGeocoder({
-                    accessToken: mapboxgl.accessToken,
-                    localGeocoder: coordinatesGeocoder, // Use the custom coordinate parser
-                    placeholder: 'Address or Lat, Lng',
-                    mapboxgl: mapboxgl,
-                    marker: false // Don't add a marker automatically on geocode result
-                }),
-                'top-left' // Position geocoder
-            );
+             // Create Geocoder instance FIRST
+             const geocoder = new MapboxGeocoder({
+                 accessToken: mapboxgl.accessToken,
+                 localGeocoder: coordinatesGeocoder,
+                 placeholder: 'Address or Lat, Lng',
+                 mapboxgl: mapboxgl,
+                 marker: false // We handle the marker/popup via click simulation
+             });
+            map.addControl(geocoder, 'top-left'); // Add to map
 
             // --- Event Listeners ---
-
-            // Recalculate VH on resize/orientation change
             window.addEventListener('resize', calculateVh);
             window.addEventListener('orientationchange', calculateVh);
 
             // Handle Map Clicks
             map.on('click', (e) => {
                 const { lng, lat } = e.lngLat;
-                let popup = null; // Hold reference to the popup
 
-                 // Show a temporary loading popup
-                popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false })
+                // Remove existing popup if it exists
+                if (activePopup) {
+                    activePopup.remove();
+                    activePopup = null;
+                }
+
+                // Show a temporary loading popup and assign it to activePopup
+                activePopup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, maxWidth: '300px' })
                     .setLngLat(e.lngLat)
                     .setHTML('<em>Loading tax data...</em>')
                     .addTo(map);
 
-                // 1. Reverse Geocode to get location name (using Mapbox API)
+                // 1. Reverse Geocode (Optional but nice for location name)
                 const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxgl.accessToken}`;
+                let locationName = 'Selected Location'; // Default name
 
                 $.get(geocodeUrl)
                     .done((geocodeResult) => {
-                        const locationName = (geocodeResult.features && geocodeResult.features.length > 0)
-                            ? geocodeResult.features[0].place_name
-                            : 'Unknown Location';
-
+                        if (geocodeResult.features && geocodeResult.features.length > 0) {
+                             locationName = geocodeResult.features[0].place_name;
+                        }
+                    })
+                    .fail((geocodeXhr, geocodeStatus, geocodeError) => {
+                        console.warn("Mapbox Geocoding Error (non-critical):", geocodeStatus, geocodeError);
+                        // Proceed without a specific location name
+                    })
+                    .always(() => { // Execute tax lookup regardless of geocoding success/failure
                         // 2. Get Tax Data via Proxy
                         const taxApiUrl = `${AVALARA_TAX_URL_BASE}?latitude=${lat}&longitude=${lng}`;
                         $.post(TAX_API_PROXY_URL, { url: taxApiUrl })
                             .done((taxResult) => {
-                                // Create popup content *after* getting data
                                 const popupContent = createPopupHtml(locationName, taxResult, lat, lng);
-                                if (popup) {
-                                    popup.setHTML(popupContent).options.closeButton = true; // Add close button now
-                                    popup.options.closeOnClick = true;
-                                } else {
-                                     // If initial popup failed somehow, create a new one
-                                      new mapboxgl.Popup()
-                                        .setLngLat(e.lngLat)
-                                        .setHTML(popupContent)
-                                        .addTo(map);
+                                if (activePopup) {
+                                    activePopup.setHTML(popupContent);
+                                    activePopup.options.closeButton = true; // Enable close button
+                                    activePopup.options.closeOnClick = true;
                                 }
-
-                                // Optional: Log to console or a hidden div
-                                // console.log({ locationName, taxData: taxResult, lat, lng });
-                                // $("#keeptrack").append(popupContent + "<hr>"); // If you want to keep the log
                             })
                             .fail((taxXhr, taxStatus, taxError) => {
                                 console.error("Tax API Error:", taxStatus, taxError, taxXhr.responseText);
-                                const errorContent = `<h4>${locationName}</h4><p>Could not retrieve tax data. Please try again later.</p><div class="coordinates">Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}</div>`;
-                                if (popup) {
-                                     popup.setHTML(errorContent).options.closeButton = true;
-                                     popup.options.closeOnClick = true;
-                                } else {
-                                      new mapboxgl.Popup()
-                                        .setLngLat(e.lngLat)
-                                        .setHTML(errorContent)
-                                        .addTo(map);
+                                const errorContent = `<h4>${locationName}</h4><p>Could not retrieve tax data. The service might be unavailable or the location may not be recognized.</p><div class="coordinates">Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}</div>`;
+                                if (activePopup) {
+                                    activePopup.setHTML(errorContent);
+                                    activePopup.options.closeButton = true;
+                                    activePopup.options.closeOnClick = true;
                                 }
                             });
-                    })
-                    .fail((geocodeXhr, geocodeStatus, geocodeError) => {
-                        console.error("Mapbox Geocoding Error:", geocodeStatus, geocodeError);
-                         // Still try to get tax data, just without a pretty name
-                        const taxApiUrl = `${AVALARA_TAX_URL_BASE}?latitude=${lat}&longitude=${lng}`;
-                         $.post(TAX_API_PROXY_URL, { url: taxApiUrl })
-                             .done((taxResult) => {
-                                 const popupContent = createPopupHtml('Selected Location', taxResult, lat, lng); // Use generic name
-                                 if(popup) {
-                                    popup.setHTML(popupContent).options.closeButton = true;
-                                    popup.options.closeOnClick = true;
-                                 } else {
-                                     new mapboxgl.Popup()
-                                        .setLngLat(e.lngLat)
-                                        .setHTML(popupContent)
-                                        .addTo(map);
-                                 }
-                             })
-                             .fail((taxXhr, taxStatus, taxError) => {
-                                 console.error("Tax API Error (after geocode fail):", taxStatus, taxError);
-                                 const errorContent = `<h4>Error</h4><p>Could not retrieve location name or tax data.</p><div class="coordinates">Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}</div>`;
-                                 if(popup) {
-                                    popup.setHTML(errorContent).options.closeButton = true;
-                                    popup.options.closeOnClick = true;
-                                 } else {
-                                      new mapboxgl.Popup()
-                                        .setLngLat(e.lngLat)
-                                        .setHTML(errorContent)
-                                        .addTo(map);
-                                 }
-                             });
-                    });
-            });
+                    }); // End .always() for geocoding
+            }); // End map.on('click')
 
-            // Optional: Handle geocoder result selection if you want to trigger the tax lookup automatically
-             const geocoder = map.getControlByClass('mapboxgl-ctrl-geocoder'); // Assuming only one geocoder control
-             if (geocoder) {
-                 geocoder.on('result', (e) => {
-                     if (e.result && e.result.center) {
-                         const [lng, lat] = e.result.center;
-                         // Simulate a map click at the result's location
-                         map.fire('click', { lngLat: { lng, lat } });
+            // Handle geocoder result selection
+             geocoder.on('result', (e) => {
+                 if (e.result && e.result.center) {
+                     const [lng, lat] = e.result.center;
+                     map.flyTo({ center: [lng, lat], zoom: 14 }); // Zoom in on result
 
-                         // Fly map to the location
-                         map.flyTo({
-                             center: [lng, lat],
-                             zoom: 14 // Zoom in closer on geocode result
-                         });
-                     }
-                 });
-             }
-
+                     // Simulate a map click AFTER the map fly-to animation finishes
+                     map.once('moveend', () => {
+                        // Use timeout to ensure UI thread is free and click can be processed
+                        setTimeout(() => {
+                             // Check if the center is still the intended target (user might have moved map)
+                             const currentCenter = map.getCenter();
+                             if (Math.abs(currentCenter.lng - lng) < 0.0001 && Math.abs(currentCenter.lat - lat) < 0.0001) {
+                                 map.fire('click', { lngLat: { lng, lat }, point: map.project([lng, lat]) });
+                             }
+                        }, 100); // Increased delay slightly
+                     });
+                 }
+             }); // End geocoder.on('result')
 
         }); // End DOMContentLoaded
     </script>
