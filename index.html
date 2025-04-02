@@ -6,8 +6,8 @@
 
     <!-- Meta Information -->
     <title>Sales Tax Rate Map - What Sales Tax Rate</title>
-    <meta name="description" content="Interactive satellite map to find US sales tax rates. Features history, favorites, sharing, and map style options.">
-    <meta name="keywords" content="Sales Tax, Small Business, Sales Tax Rate, Sales Tax Map, Shipping, Drop Ship, United States, Tax Rate Lookup, Satellite Map, Geocoding, Avalara, Favorites, History">
+    <meta name="description" content="Interactive satellite map to find US sales tax rates. Features history, favorites, sharing, print with map snippet, and map style options.">
+    <meta name="keywords" content="Sales Tax, Small Business, Sales Tax Rate, Sales Tax Map, Shipping, Drop Ship, United States, Tax Rate Lookup, Satellite Map, Geocoding, Avalara, Favorites, History, Print Map">
 
     <!-- CSS Dependencies -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
@@ -52,60 +52,24 @@
         #menu {
             flex-shrink: 0;
             z-index: 1000;
-            /* Allow menu items to wrap on small screens if needed */
-            /* min-height: var(--menu-height); */
         }
-         /* Make menu items slightly smaller for more space */
-        #menu .item {
-            padding: .8em 1em;
-            font-size: 0.9rem;
-        }
-         /* Style for active map style button */
-         #menu .map-style-button.active {
-             background-color: rgba(255,255,255,.15) !important;
-         }
+        #menu .item { padding: .8em 1em; font-size: 0.9rem; }
+        #menu .map-style-button.active { background-color: rgba(255,255,255,.15) !important; }
 
-
-        #map-container {
-            flex-grow: 1;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #map {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-        }
+        #map-container { flex-grow: 1; position: relative; overflow: hidden; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; height: 100%; }
 
         #page-footer {
-            flex-shrink: 0;
-            padding: 5px 15px;
-            font-size: 0.75em;
-            background-color: #eee;
-            border-top: 1px solid #ddd;
-            text-align: center;
-            color: #555;
-            z-index: 5; /* Above map but below menu/modals */
+            flex-shrink: 0; padding: 5px 15px; font-size: 0.75em; background-color: #eee;
+            border-top: 1px solid #ddd; text-align: center; color: #555; z-index: 5;
         }
-         #page-footer p {
-             margin: 2px 0;
-         }
+        #page-footer p { margin: 2px 0; }
 
-        /* Style popups */
+        /* Popups */
         .mapboxgl-popup-content {
-            background-color: rgba(255, 255, 255, .95);
-            padding: 15px;
-            padding-right: 35px; /* Space for close button */
-            box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
-            border-radius: 4px;
-            font-family: 'Sen', sans-serif;
-            max-width: 320px; /* Slightly wider */
-            max-height: 300px; /* Slightly taller */
-            overflow-y: auto;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            background-color: rgba(255, 255, 255, .95); padding: 15px; padding-right: 35px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .1); border-radius: 4px; font-family: 'Sen', sans-serif;
+            max-width: 320px; max-height: 300px; overflow-y: auto; overflow-x: hidden;
         }
         .mapboxgl-popup-content h4 { margin: 0 0 10px 0; font-weight: bold; color: #333; font-size: 1.1em; }
         .mapboxgl-popup-content ul { list-style: none; padding: 0; margin: 0 0 10px 0; }
@@ -114,133 +78,99 @@
         .mapboxgl-popup-content .tax-rate { font-family: 'Roboto Mono', monospace; font-weight: bold; }
         .mapboxgl-popup-content .tax-total { font-weight: bold; margin-top: 8px; border-top: 1px solid #eee; padding-top: 8px; }
         .mapboxgl-popup-content .coordinates { font-family: 'Roboto Mono', monospace; font-size: 0.8em; color: #555; margin-top: 10px; word-break: break-all; }
-        .mapboxgl-popup-content em { color: #666; font-style: italic; } /* Loading/Info text */
-        .mapboxgl-popup-content p.error-message { color: #a94442; margin-bottom: 10px; font-weight: bold;} /* Error messages */
+        .mapboxgl-popup-content em { color: #666; font-style: italic; }
+        .mapboxgl-popup-content p.error-message { color: #a94442; margin-bottom: 10px; font-weight: bold;}
         .mapboxgl-popup-content .popup-actions { margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; display: flex; gap: 5px; flex-wrap: wrap;}
-        .mapboxgl-popup-content .popup-actions .ui.button {
-            padding: 5px 8px !important; /* Smaller buttons */
-            font-size: 0.8rem !important;
-            flex-grow: 1; /* Allow buttons to grow */
-            min-width: 60px; /* Minimum width */
-        }
-         .mapboxgl-popup-content .official-link { margin-top: 10px; font-size: 0.8em; }
+        .mapboxgl-popup-content .popup-actions .ui.button { padding: 5px 8px !important; font-size: 0.8rem !important; flex-grow: 1; min-width: 60px; }
+        .mapboxgl-popup-content .official-link { margin-top: 10px; font-size: 0.8em; }
 
+        /* Controls Position */
+        .mapboxgl-ctrl-top-left { margin-top: calc(var(--menu-height) + 10px); margin-left: 10px; max-width: calc(100% - 20px); }
+        .mapboxgl-ctrl-top-right { margin-top: calc(var(--menu-height) + 10px); }
 
-        /* Style adjustments for controls under fixed menu */
-        .mapboxgl-ctrl-top-left {
-            margin-top: calc(var(--menu-height) + 10px); /* Use variable + buffer */
-            margin-left: 10px;
-            max-width: calc(100% - 20px); /* Prevent overflow on small screens */
-        }
-
-        /* *** NEW: Style for top-right controls (navigation) *** */
-        .mapboxgl-ctrl-top-right {
-            margin-top: calc(var(--menu-height) + 10px); /* Match top-left margin */
-        }
-
-
-        /* Geocoder styling */
+        /* Geocoder */
         .mapboxgl-ctrl-geocoder {
-             font-size: 14px;
-             max-width: 300px;
-             width: auto;
-             border: 1px solid #ccc;
-             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-             border-radius: 4px;
+             font-size: 14px; max-width: 300px; width: auto; border: 1px solid #ccc;
+             box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 4px;
         }
         .mapboxgl-ctrl-geocoder input[type='text'] { height: 38px; padding: 0 35px 0 10px; }
         .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--icon-search { top: 9px; left: auto; right: 10px; }
         .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--button { top: 9px; right: 10px; }
-        /* Ensure geocoder suggestions list is above footer */
-        .mapboxgl-ctrl-geocoder .suggestions {
-             z-index: 10;
-        }
-
+        .mapboxgl-ctrl-geocoder .suggestions { z-index: 10; }
 
         /* History/Favorites Modal */
         .history-favorites-list .item {
-            cursor: pointer;
-            padding: 8px 5px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            cursor: pointer; padding: 8px 5px; border-bottom: 1px solid #eee; display: flex;
+            justify-content: space-between; align-items: center;
         }
         .history-favorites-list .item:hover { background-color: #f9f9f9; }
         .history-favorites-list .item .location-name { flex-grow: 1; margin-right: 10px; font-size: 0.9em; }
         .history-favorites-list .item .ui.button { padding: 3px 6px !important; font-size: 0.75rem !important; margin-left: 5px; }
-         .history-favorites-list .list-header { font-weight: bold; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #ccc; }
-         .history-favorites-list .empty-message { color: #888; font-style: italic; }
-
+        .history-favorites-list .list-header { font-weight: bold; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #ccc; }
+        .history-favorites-list .empty-message { color: #888; font-style: italic; }
 
         /* Print Styles */
         @media print {
-            body, html {
-                height: auto;
-                overflow: visible;
-                background-color: #fff;
-            }
+            body, html { height: auto; overflow: visible; background-color: #fff; }
             #wrapper { height: auto; flex-direction: column; }
-            #menu, #map-container, #page-footer, .mapboxgl-ctrl, .mapboxgl-popup-close-button, .mapboxgl-popup-tip {
-                display: none !important; /* Hide non-print elements */
+            #menu, #map-container, #page-footer, .mapboxgl-ctrl, .mapboxgl-popup-close-button, .mapboxgl-popup-tip { display: none !important; }
+            #print-summary { display: block !important; margin: 20px; padding: 15px; border: 1px solid #ccc; }
+            /* Style print summary content */
+            #print-summary h4 { margin: 0 0 15px 0; font-weight: bold; font-size: 1.2em; }
+            /* *** NEW: Style for print map image *** */
+            #print-summary .print-map-image {
+                display: block; /* Ensure it's block level */
+                max-width: 100%; /* Don't exceed container width */
+                height: auto;    /* Maintain aspect ratio */
+                border: 1px solid #ccc;
+                margin-top: 15px;
+                margin-bottom: 15px;
             }
-             /* Show only the print summary */
-             #print-summary {
-                 display: block !important;
-                 margin: 20px;
-                 padding: 15px;
-                 border: 1px solid #ccc;
-             }
-              /* Style print summary content (similar to popup) */
-             #print-summary h4 { margin: 0 0 10px 0; font-weight: bold; font-size: 1.2em; }
-             #print-summary ul { list-style: none; padding: 0; margin: 0 0 10px 0; }
-             #print-summary li { margin-bottom: 5px; font-size: 1em; }
-             #print-summary .tax-jurisdiction { font-family: 'Sen', sans-serif; }
-             #print-summary .tax-rate { font-family: 'Roboto Mono', monospace; font-weight: bold; }
-             #print-summary .tax-total { font-weight: bold; margin-top: 8px; border-top: 1px solid #eee; padding-top: 8px; }
-             #print-summary .coordinates { font-family: 'Roboto Mono', monospace; font-size: 0.9em; color: #333; margin-top: 10px; }
-             #print-summary .print-info { font-size: 0.8em; color: #666; margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 5px;}
+            #print-summary ul { list-style: none; padding: 0; margin: 0 0 10px 0; }
+            #print-summary li { margin-bottom: 5px; font-size: 1em; }
+            #print-summary .tax-jurisdiction { font-family: 'Sen', sans-serif; }
+            #print-summary .tax-rate { font-family: 'Roboto Mono', monospace; font-weight: bold; }
+            #print-summary .tax-total { font-weight: bold; margin-top: 8px; border-top: 1px solid #eee; padding-top: 8px; }
+            #print-summary .coordinates { font-family: 'Roboto Mono', monospace; font-size: 0.9em; color: #333; margin-top: 10px; }
+            #print-summary .print-info { font-size: 0.8em; color: #666; margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 5px;}
         }
 
-         /* Hidden print summary div for regular view */
-        #print-summary {
-             display: none;
-         }
+        /* Hidden print summary div */
+        #print-summary { display: none; }
 
-         /* Responsive adjustments */
-         @media (max-width: 767px) {
-             /* Stack menu items or make them smaller */
-            #menu .item { font-size: 0.8rem; padding: .6em .8em; }
-            #menu .right.menu { display: none; } /* Example: Hide right menu on mobile */
-            .mapboxgl-ctrl-top-left { margin-top: calc(var(--menu-height) + 5px); } /* Reduce top margin */
-            .mapboxgl-ctrl-top-right { margin-top: calc(var(--menu-height) + 5px); } /* Reduce top margin on mobile too */
-             .mapboxgl-ctrl-geocoder { max-width: 250px; } /* Shrink geocoder */
-             .mapboxgl-popup-content { max-width: 280px; }
-         }
+        /* Responsive adjustments */
+        @media (max-width: 767px) {
+           #menu .item { font-size: 0.8rem; padding: .6em .8em; }
+           #menu .right.menu { display: none; }
+           .mapboxgl-ctrl-top-left { margin-top: calc(var(--menu-height) + 5px); }
+           .mapboxgl-ctrl-top-right { margin-top: calc(var(--menu-height) + 5px); }
+            .mapboxgl-ctrl-geocoder { max-width: 250px; }
+            .mapboxgl-popup-content { max-width: 280px; }
+        }
 
     </style>
 </head>
 <body>
 
     <div id="wrapper">
-
+        <!-- Menu -->
         <div id="menu" class="ui inverted fixed menu">
-            <div class="ui container fluid"> <!-- Use fluid for full width -->
-                <span class="item header active">Sales Tax Map</span> <!-- Use header class -->
+            <div class="ui container fluid">
+                <span class="item header active">Sales Tax Map</span>
                 <div class="item ui buttons map-style-buttons">
                     <button class="ui inverted button map-style-button" data-style="mapbox://styles/mapbox/satellite-streets-v11" title="Satellite + Streets">Satellite</button>
-                    <!-- *** Changed: Streets button is now 'active' by default *** -->
                     <button class="ui inverted button map-style-button active" data-style="mapbox://styles/mapbox/streets-v11" title="Streets">Streets</button>
                     <button class="ui inverted button map-style-button" data-style="mapbox://styles/mapbox/light-v10" title="Light">Light</button>
                     <button class="ui inverted button map-style-button" data-style="mapbox://styles/mapbox/dark-v10" title="Dark">Dark</button>
                 </div>
-                <div class="right menu"> <!-- Right aligned items -->
+                <div class="right menu">
                      <a class="item" id="history-favorites-button" title="View History & Favorites"><i class="history icon"></i>History/Favs</a>
                      <a class="item" href='https://github.com/whatsalestaxrate/whatsalestaxrate/blob/master/README.md' target="_blank" rel="noopener noreferrer" title="View Source Code & Disclosures on GitHub"><i class="github icon"></i>Source</a>
                  </div>
             </div>
         </div>
 
+        <!-- Map Container -->
         <div id="map-container">
              <div id="map"></div>
         </div>
@@ -248,6 +178,7 @@
         <!-- Hidden div for printing -->
         <div id="print-summary"></div>
 
+        <!-- Footer -->
          <footer id="page-footer">
              <p>Tax data provided via Avalara. Rates are for informational purposes only and may not reflect all local taxes or recent changes.</p>
              <p>Always verify rates with official sources before making financial decisions. Use of this tool constitutes acceptance of these terms.</p>
@@ -258,32 +189,21 @@
     <!-- History / Favorites Modal -->
     <div class="ui modal" id="history-favorites-modal">
       <i class="close icon"></i>
-      <div class="header">
-        Lookup History & Saved Favorites
-      </div>
+      <div class="header"> Lookup History & Saved Favorites </div>
       <div class="scrolling content">
          <div class="ui two column grid">
              <div class="column">
                  <div class="list-header">Recent History (Last 10)</div>
-                 <div class="ui relaxed list history-favorites-list" id="history-list">
-                     <!-- History items will be populated here -->
-                     <div class="empty-message">No history yet.</div>
-                 </div>
+                 <div class="ui relaxed list history-favorites-list" id="history-list"> <div class="empty-message">No history yet.</div> </div>
              </div>
               <div class="column">
                  <div class="list-header">Favorites</div>
-                 <div class="ui relaxed list history-favorites-list" id="favorites-list">
-                      <!-- Favorites items will be populated here -->
-                      <div class="empty-message">No favorites saved.</div>
-                 </div>
+                 <div class="ui relaxed list history-favorites-list" id="favorites-list"> <div class="empty-message">No favorites saved.</div> </div>
              </div>
          </div>
       </div>
-       <div class="actions">
-          <div class="ui black deny button"> Close </div>
-       </div>
+       <div class="actions"> <div class="ui black deny button"> Close </div> </div>
     </div>
-
 
     <!-- JavaScript Dependencies -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -302,130 +222,49 @@
             const HISTORY_KEY = 'salesTaxMapHistory';
             const FAVORITES_KEY = 'salesTaxMapFavorites';
             const MAX_HISTORY_ITEMS = 10;
-            // *** Changed: Default to streets-v11 for faster load ***
             const DEFAULT_MAP_STYLE = 'mapbox://styles/mapbox/streets-v11';
+            const PRINT_MAP_ZOOM = 14; // Zoom level for static map image
+            const PRINT_MAP_WIDTH = 400; // Width for static map image
+            const PRINT_MAP_HEIGHT = 250; // Height for static map image
 
             // --- State Variables ---
             let activePopup = null;
-            let map = null; // Initialize map later
-            let geocoder = null; // Initialize geocoder later
+            let map = null;
+            let geocoder = null;
             let historyList = [];
             let favoritesList = [];
             let currentMapStyle = DEFAULT_MAP_STYLE;
-            let currentLocationData = null; // Store data for current popup {lat, lng, name, taxData}
+            let currentLocationData = null;
 
             // --- Helper Functions ---
             const calculateVh = () => {
                 let vh = window.innerHeight * 0.01;
                 document.documentElement.style.setProperty('--vh', `${vh}px`);
-                // Adjust menu height variable if needed dynamically (usually fixed though)
-                // document.documentElement.style.setProperty('--menu-height', `${$('#menu').outerHeight()}px`);
             };
 
-            // --- LocalStorage Functions ---
-            const saveToLocalStorage = (key, data) => {
-                try {
-                    localStorage.setItem(key, JSON.stringify(data));
-                } catch (e) {
-                    console.error("Error saving to localStorage:", e);
-                }
-            };
+            // --- LocalStorage Functions --- (Keep as before)
+            const saveToLocalStorage = (key, data) => { try { localStorage.setItem(key, JSON.stringify(data)); } catch (e) { console.error("LS Save Error:", e); } };
+            const loadFromLocalStorage = (key) => { try { const data = localStorage.getItem(key); return data ? JSON.parse(data) : []; } catch (e) { console.error("LS Load Error:", e); return []; } };
+            const addLocationToHistory = (location) => { historyList.unshift(location); if (historyList.length > MAX_HISTORY_ITEMS) historyList.pop(); saveToLocalStorage(HISTORY_KEY, historyList); renderHistoryList(); };
+            const addLocationToFavorites = (location) => { if (!favoritesList.some(item => item.lat === location.lat && item.lng === location.lng)) { favoritesList.push(location); saveToLocalStorage(FAVORITES_KEY, favoritesList); renderFavoritesList(); alert(`${location.name} added to favorites!`); } else { alert(`${location.name} is already in favorites.`); }};
+            const removeFavorite = (lat, lng) => { favoritesList = favoritesList.filter(item => !(item.lat === lat && item.lng === lng)); saveToLocalStorage(FAVORITES_KEY, favoritesList); renderFavoritesList(); };
 
-            const loadFromLocalStorage = (key) => {
-                try {
-                    const data = localStorage.getItem(key);
-                    return data ? JSON.parse(data) : [];
-                } catch (e) {
-                    console.error("Error loading from localStorage:", e);
-                    return [];
-                }
-            };
-
-             const addLocationToHistory = (location) => {
-                 // Remove existing entry for the same location (optional, keeps list unique by coords)
-                 // historyList = historyList.filter(item => !(item.lat === location.lat && item.lng === location.lng));
-
-                 // Add to front
-                 historyList.unshift(location);
-                 // Limit size
-                 if (historyList.length > MAX_HISTORY_ITEMS) {
-                     historyList.pop();
-                 }
-                 saveToLocalStorage(HISTORY_KEY, historyList);
-                 renderHistoryList(); // Update UI
-             };
-
-            const addLocationToFavorites = (location) => {
-                // Check if already favorited
-                 if (!favoritesList.some(item => item.lat === location.lat && item.lng === location.lng)) {
-                    favoritesList.push(location);
-                    saveToLocalStorage(FAVORITES_KEY, favoritesList);
-                    renderFavoritesList(); // Update UI
-                    alert(`${location.name} added to favorites!`);
-                 } else {
-                     alert(`${location.name} is already in favorites.`);
-                 }
-            };
-
-             const removeFavorite = (lat, lng) => {
-                 favoritesList = favoritesList.filter(item => !(item.lat === lat && item.lng === lng));
-                 saveToLocalStorage(FAVORITES_KEY, favoritesList);
-                 renderFavoritesList(); // Update UI
-            };
-
-            // --- UI Rendering Functions ---
-            const renderHistoryList = () => {
-                const listElement = $('#history-list');
-                listElement.empty(); // Clear existing
-                if (historyList.length === 0) {
-                    listElement.append('<div class="empty-message">No history yet.</div>');
-                    return;
-                }
-                historyList.forEach(loc => {
-                    const itemHtml = `
-                        <div class="item history-item" data-lat="${loc.lat}" data-lng="${loc.lng}">
-                            <span class="location-name">${loc.name || `Lat: ${loc.lat.toFixed(3)}, Lng: ${loc.lng.toFixed(3)}`}</span>
-                            <button class="ui mini icon button go-to-button" title="Go to this location"><i class="map marker alternate icon"></i></button>
-                        </div>`;
-                    listElement.append(itemHtml);
-                });
-            };
-
-            const renderFavoritesList = () => {
-                 const listElement = $('#favorites-list');
-                 listElement.empty(); // Clear existing
-                 if (favoritesList.length === 0) {
-                     listElement.append('<div class="empty-message">No favorites saved.</div>');
-                     return;
-                 }
-                 favoritesList.forEach(loc => {
-                     const itemHtml = `
-                        <div class="item favorite-item" data-lat="${loc.lat}" data-lng="${loc.lng}">
-                             <span class="location-name">${loc.name || `Lat: ${loc.lat.toFixed(3)}, Lng: ${loc.lng.toFixed(3)}`}</span>
-                            <span> <!-- Wrap buttons -->
-                                <button class="ui mini icon button go-to-button" title="Go to this location"><i class="map marker alternate icon"></i></button>
-                                <button class="ui mini red icon button remove-favorite-button" title="Remove favorite"><i class="trash alternate outline icon"></i></button>
-                             </span>
-                         </div>`;
-                     listElement.append(itemHtml);
-                 });
-            };
+            // --- UI Rendering Functions --- (Keep renderHistoryList, renderFavoritesList as before)
+            const renderHistoryList = () => { const listElement = $('#history-list'); listElement.empty(); if (historyList.length === 0) { listElement.append('<div class="empty-message">No history yet.</div>'); return; } historyList.forEach(loc => { const itemHtml = `<div class="item history-item" data-lat="${loc.lat}" data-lng="${loc.lng}"><span class="location-name">${loc.name || `Lat: ${loc.lat.toFixed(3)}, Lng: ${loc.lng.toFixed(3)}`}</span><button class="ui mini icon button go-to-button" title="Go to this location"><i class="map marker alternate icon"></i></button></div>`; listElement.append(itemHtml); }); };
+            const renderFavoritesList = () => { const listElement = $('#favorites-list'); listElement.empty(); if (favoritesList.length === 0) { listElement.append('<div class="empty-message">No favorites saved.</div>'); return; } favoritesList.forEach(loc => { const itemHtml = `<div class="item favorite-item" data-lat="${loc.lat}" data-lng="${loc.lng}"><span class="location-name">${loc.name || `Lat: ${loc.lat.toFixed(3)}, Lng: ${loc.lng.toFixed(3)}`}</span><span><button class="ui mini icon button go-to-button" title="Go to this location"><i class="map marker alternate icon"></i></button><button class="ui mini red icon button remove-favorite-button" title="Remove favorite"><i class="trash alternate outline icon"></i></button></span></div>`; listElement.append(itemHtml); }); };
 
             // --- Popup Content & Actions ---
             const createPopupHtml = (locationName, taxData, lat, lng) => {
+                // ... (logic for tax summary remains the same) ...
                 let popupHtml = `<h4>${locationName || 'Selected Location'}</h4>`;
                 let running_sum = 0;
                 let taxSummaryList = '';
 
                 if (taxData && taxData.summary && taxData.summary.length > 0) {
                     taxSummaryList += `<ul>`;
-                    taxData.summary.forEach(item => {
-                        const taxRate = parseFloat(item.taxCalculated) || 0;
-                        running_sum += taxRate;
-                        taxSummaryList += `<li><span class="tax-jurisdiction">${item.jurisName}:</span> <span class="tax-rate">${taxRate.toFixed(3)}%</span></li>`;
-                    });
+                    taxData.summary.forEach(item => { const taxRate = parseFloat(item.taxCalculated) || 0; running_sum += taxRate; taxSummaryList += `<li><span class="tax-jurisdiction">${item.jurisName}:</span> <span class="tax-rate">${taxRate.toFixed(3)}%</span></li>`; });
                     taxSummaryList += `</ul>`;
-                    popupHtml += taxSummaryList; // Add list to main html
+                    popupHtml += taxSummaryList;
                     popupHtml += `<div class="tax-total">Total: <span class="tax-rate">${running_sum.toFixed(3)}%</span></div>`;
                 } else if (taxData && taxData.messages && taxData.messages.length > 0) {
                      popupHtml += `<p class="error-message">${taxData.messages[0].summary || 'Could not determine tax rate.'}</p>`;
@@ -434,107 +273,84 @@
                 }
 
                 popupHtml += `<div class="coordinates">Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}</div>`;
-
-                // Placeholder Link (replace with real logic if possible)
                 popupHtml += `<div class="official-link"><a href="https://google.com/search?q=official+sales+tax+rate+for+${encodeURIComponent(locationName || `${lat},${lng}`)}" target="_blank" rel="noopener noreferrer">Search for official source <i class="external alternate icon tiny"></i></a></div>`;
+                popupHtml += `<div class="popup-actions"> <button class="ui mini blue button save-favorite-button"><i class="star icon"></i> Save Fav</button> <button class="ui mini teal button share-button"><i class="share alternate icon"></i> Share</button> <button class="ui mini orange button print-button"><i class="print icon"></i> Print</button> </div>`;
 
-                // Action Buttons
-                popupHtml += `<div class="popup-actions">
-                                <button class="ui mini blue button save-favorite-button"><i class="star icon"></i> Save Fav</button>
-                                <button class="ui mini teal button share-button"><i class="share alternate icon"></i> Share</button>
-                                <button class="ui mini orange button print-button"><i class="print icon"></i> Print</button>
-                              </div>`;
-
-                 // Update hidden print summary div
-                 updatePrintSummary(locationName, taxSummaryList, running_sum, lat, lng);
+                 // *** Call updatePrintSummary here ***
+                 // Pass the current map style ID
+                 const styleId = currentMapStyle.split('styles/')[1] || 'mapbox/streets-v11'; // Extract style ID
+                 updatePrintSummary(locationName, styleId, taxSummaryList, running_sum, lat, lng);
 
                 return popupHtml;
             };
 
-            // Update hidden div used for printing
-            const updatePrintSummary = (locationName, taxSummaryHtmlList, totalRate, lat, lng) => {
+            // *** NEW/MODIFIED: Update hidden div used for printing, now includes map image ***
+            const updatePrintSummary = (locationName, styleId, taxSummaryHtmlList, totalRate, lat, lng) => {
                 const printDiv = $('#print-summary');
+
+                 // Construct Static Image URL
+                 const marker = `pin-s(${lng.toFixed(5)},${lat.toFixed(5)})`; // Define marker at the exact coords
+                 const staticImageUrl = `https://api.mapbox.com/styles/v1/${styleId}/static/${marker}/${lng.toFixed(5)},${lat.toFixed(5)},${PRINT_MAP_ZOOM},0/${PRINT_MAP_WIDTH}x${PRINT_MAP_HEIGHT}?access_token=${MAPBOX_ACCESS_TOKEN}`;
+
+                // Build HTML for print view
                 let printHtml = `<h4>${locationName || 'Selected Location'}</h4>`;
-                printHtml += taxSummaryHtmlList || '<p>No tax summary data available.</p>'; // Use generated list HTML
-                 if (taxSummaryHtmlList) { // Only add total if list exists
+                // Add the map image
+                printHtml += `<img src="${staticImageUrl}" alt="Map showing ${locationName || 'selected location'}" class="print-map-image" width="${PRINT_MAP_WIDTH}" height="${PRINT_MAP_HEIGHT}">`;
+                // Add tax details
+                printHtml += taxSummaryHtmlList || '<p>No tax summary data available.</p>';
+                 if (taxSummaryHtmlList && !(taxSummaryHtmlList.includes("lookup failed"))) { // Only add total if list exists and no error message
                     printHtml += `<div class="tax-total">Total: <span class="tax-rate">${totalRate.toFixed(3)}%</span></div>`;
                  }
                  printHtml += `<div class="coordinates">Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}</div>`;
                  printHtml += `<div class="print-info">Printed from Sales Tax Map on ${new Date().toLocaleString()}</div>`;
+
                  printDiv.html(printHtml);
             };
 
 
              // --- Geocoding & Tax Lookup ---
              const handleMapClick = (coords) => {
+                 // ... (reset state, show loading popup - same as before) ...
                  const { lng, lat } = coords;
-                 currentLocationData = null; // Reset current data
-
-                 if (activePopup) {
-                     activePopup.remove();
-                     activePopup = null;
-                 }
-
-                 // Use a placeholder with loading indicator
+                 currentLocationData = null;
+                 if (activePopup) { activePopup.remove(); activePopup = null; }
                  const loadingHtml = `<em><i class="ui spinner loading icon small"></i> Looking up tax data...</em>`;
-                 activePopup = new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '320px' })
-                     .setLngLat(coords)
-                     .setHTML(loadingHtml)
-                     .addTo(map);
+                 activePopup = new mapboxgl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '320px' }).setLngLat(coords).setHTML(loadingHtml).addTo(map);
 
                  // 1. Reverse Geocode
                  const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxgl.accessToken}`;
-                 let locationName = `Location @ ${lat.toFixed(4)}, ${lng.toFixed(4)}`; // Default name
+                 let locationName = `Location @ ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
 
                  $.get(geocodeUrl)
-                     .done((geocodeResult) => {
-                         if (geocodeResult.features && geocodeResult.features.length > 0) {
-                              locationName = geocodeResult.features[0].place_name;
-                         }
-                     })
-                     .fail((geocodeXhr, geocodeStatus, geocodeError) => {
-                         console.warn("Mapbox Geocoding Error (non-critical):", geocodeStatus, geocodeError);
-                     })
+                     .done((geocodeResult) => { if (geocodeResult.features && geocodeResult.features.length > 0) locationName = geocodeResult.features[0].place_name; })
+                     .fail((xhr, status, err) => { console.warn("Geocoding Error:", status, err); })
                      .always(() => {
                          // 2. Get Tax Data
                          const taxApiUrl = `${AVALARA_TAX_URL_BASE}?latitude=${lat}&longitude=${lng}`;
                          $.post(TAX_API_PROXY_URL, { url: taxApiUrl })
                              .done((taxResult) => {
-                                 // Store data before generating HTML
                                  currentLocationData = { lat, lng, name: locationName, taxData: taxResult };
+                                 // *** createPopupHtml now implicitly calls updatePrintSummary ***
                                  const popupContent = createPopupHtml(locationName, taxResult, lat, lng);
-                                 if (activePopup) {
-                                     activePopup.setHTML(popupContent);
-                                 }
-                                 // Add to history only on successful lookup
+                                 if (activePopup) activePopup.setHTML(popupContent);
                                  addLocationToHistory({ lat, lng, name: locationName });
                              })
-                             .fail((taxXhr, taxStatus, taxError) => {
-                                 console.error("Tax API Error:", taxStatus, taxError, taxXhr.responseText);
-                                 currentLocationData = { lat, lng, name: locationName, taxData: null }; // Store location even on error
-                                 const errorContent = createPopupHtml(locationName, null, lat, lng); // Generate error view
-                                 if (activePopup) {
-                                     activePopup.setHTML(errorContent.replace('<p><em>No tax summary data found for this location.</em></p>', '<p class="error-message">Could not retrieve tax data. Service unavailable or location not recognized.</p>'));
-                                 }
-                                 updatePrintSummary(locationName, '<p>Tax data lookup failed.</p>', 0, lat, lng); // Update print view for error
+                             .fail((xhr, status, err) => {
+                                 console.error("Tax API Error:", status, err, xhr.responseText);
+                                 currentLocationData = { lat, lng, name: locationName, taxData: null };
+                                 // *** createPopupHtml now implicitly calls updatePrintSummary, even on error ***
+                                 const errorContent = createPopupHtml(locationName, null, lat, lng)
+                                     .replace('<p><em>No tax summary data found for this location.</em></p>', '<p class="error-message">Could not retrieve tax data. Service unavailable or location not recognized.</p>');
+                                 if (activePopup) activePopup.setHTML(errorContent);
+                                 // Explicitly update print summary for error state if needed (though createPopupHtml does it)
+                                 // const styleId = currentMapStyle.split('styles/')[1] || 'mapbox/streets-v11';
+                                 // updatePrintSummary(locationName, styleId, '<p>Tax data lookup failed.</p>', 0, lat, lng);
                              });
                      });
              };
 
 
-            const coordinatesGeocoder = (query) => {
-                // ... (this function remains the same)
-                const matches = query.match( /^[ ]*(?:Lat: )?(-?\d+\.?\d*)[, ]+(?:Lng: )?(-?\d+\.?\d*)[ ]*$/i );
-                if (!matches) return null;
-                function coordinateFeature(lng, lat) {
-                    if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return null;
-                    return { center: [lng, lat], geometry: { type: 'Point', coordinates: [lng, lat] }, place_name: `Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`, place_type: ['coordinate'], properties: {}, type: 'Feature' };
-                }
-                const coord1 = Number(matches[1]); const coord2 = Number(matches[2]); const geocodes = [];
-                const featureLngLat = coordinateFeature(coord1, coord2); if (featureLngLat) geocodes.push(featureLngLat);
-                const featureLatLng = coordinateFeature(coord2, coord1); if (featureLatLng && (coord1 !== coord2 || !featureLngLat)) geocodes.push(featureLatLng);
-                return geocodes.length > 0 ? geocodes : null;
-            };
+            const coordinatesGeocoder = (query) => { /* ... (remains the same) ... */ const matches = query.match( /^[ ]*(?:Lat: )?(-?\d+\.?\d*)[, ]+(?:Lng: )?(-?\d+\.?\d*)[ ]*$/i ); if (!matches) return null; function coordinateFeature(lng, lat) { if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return null; return { center: [lng, lat], geometry: { type: 'Point', coordinates: [lng, lat] }, place_name: `Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`, place_type: ['coordinate'], properties: {}, type: 'Feature' }; } const coord1 = Number(matches[1]); const coord2 = Number(matches[2]); const geocodes = []; const featureLngLat = coordinateFeature(coord1, coord2); if (featureLngLat) geocodes.push(featureLngLat); const featureLatLng = coordinateFeature(coord2, coord1); if (featureLatLng && (coord1 !== coord2 || !featureLngLat)) geocodes.push(featureLatLng); return geocodes.length > 0 ? geocodes : null; };
 
 
             // --- Initialization ---
@@ -543,158 +359,36 @@
             favoritesList = loadFromLocalStorage(FAVORITES_KEY);
 
             mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
-            map = new mapboxgl.Map({ // Assign to global `map` variable
-                container: 'map',
-                // *** Changed: Default map style to streets-v11 ***
-                style: currentMapStyle, // Use variable for initial style
-                center: [-98.5795, 39.8283],
-                zoom: 4
+            map = new mapboxgl.Map({
+                container: 'map', style: currentMapStyle, center: [-98.5795, 39.8283], zoom: 4
             });
 
             // --- Map Controls Init ---
-            map.addControl(new mapboxgl.NavigationControl(), 'top-right'); // Added 'top-right' position
-            map.addControl(
-                new mapboxgl.GeolocateControl({
-                    positionOptions: { enableHighAccuracy: true },
-                    trackUserLocation: true
-                }), 'top-right' // Positioned top-right as well, will adjust via CSS
-            );
-             geocoder = new MapboxGeocoder({ // Assign to global `geocoder` variable
-                 accessToken: mapboxgl.accessToken,
-                 localGeocoder: coordinatesGeocoder,
-                 placeholder: 'Address or Lat, Lng',
-                 mapboxgl: mapboxgl,
-                 marker: false
-             });
+            map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+            map.addControl( new mapboxgl.GeolocateControl({ positionOptions: { enableHighAccuracy: true }, trackUserLocation: true }), 'top-right' );
+            geocoder = new MapboxGeocoder({ accessToken: mapboxgl.accessToken, localGeocoder: coordinatesGeocoder, placeholder: 'Address or Lat, Lng', mapboxgl: mapboxgl, marker: false });
             map.addControl(geocoder, 'top-left');
 
-             // --- URL Parameter Handling ---
-             const urlParams = new URLSearchParams(window.location.search);
-             const urlLat = parseFloat(urlParams.get('lat'));
-             const urlLng = parseFloat(urlParams.get('lng'));
-             const urlZoom = parseFloat(urlParams.get('z'));
-
-             if (!isNaN(urlLat) && !isNaN(urlLng) && urlLat >= -90 && urlLat <= 90 && urlLng >= -180 && urlLng <= 180) {
-                 const targetCoords = { lat: urlLat, lng: urlLng };
-                 const targetZoom = (!isNaN(urlZoom) && urlZoom >= 0 && urlZoom <= 22) ? urlZoom : 14; // Default zoom if param invalid
-
-                 map.on('load', () => { // Wait for map to be fully loaded before flying
-                      map.flyTo({ center: targetCoords, zoom: targetZoom });
-                      // Trigger click after flying animation
-                      map.once('moveend', () => {
-                          setTimeout(() => handleMapClick(targetCoords), 100);
-                      });
-                 });
-             }
+             // --- URL Parameter Handling --- (Keep as before)
+             const urlParams = new URLSearchParams(window.location.search); const urlLat = parseFloat(urlParams.get('lat')); const urlLng = parseFloat(urlParams.get('lng')); const urlZoom = parseFloat(urlParams.get('z'));
+             if (!isNaN(urlLat) && !isNaN(urlLng) && urlLat >= -90 && urlLat <= 90 && urlLng >= -180 && urlLng <= 180) { const targetCoords = { lat: urlLat, lng: urlLng }; const targetZoom = (!isNaN(urlZoom) && urlZoom >= 0 && urlZoom <= 22) ? urlZoom : 14; map.on('load', () => { map.flyTo({ center: targetCoords, zoom: targetZoom }); map.once('moveend', () => { setTimeout(() => handleMapClick(targetCoords), 100); }); }); }
 
 
-            // --- Event Listeners ---
-            window.addEventListener('resize', calculateVh);
-            window.addEventListener('orientationchange', calculateVh);
-
-            // Map Click
-            map.on('click', (e) => {
-                 // Don't trigger if click was on a control or popup button potentially
-                 // This check might need refinement depending on exact behavior
-                 if (e.originalEvent.target.closest('.mapboxgl-ctrl') || e.originalEvent.target.closest('.mapboxgl-popup')) {
-                     return;
-                 }
-                handleMapClick(e.lngLat);
-            });
-
-             // Geocoder Result Selection
-             geocoder.on('result', (e) => {
-                 if (e.result && e.result.center) {
-                     const [lng, lat] = e.result.center;
-                     map.flyTo({ center: [lng, lat], zoom: 14 });
-                     map.once('moveend', () => {
-                         setTimeout(() => handleMapClick({ lng, lat }), 100);
-                     });
-                 }
-             });
-
-             // Map Style Buttons
-             $('.map-style-button').on('click', function() {
-                 const newStyle = $(this).data('style');
-                 if (newStyle && newStyle !== currentMapStyle) {
-                     map.setStyle(newStyle);
-                     currentMapStyle = newStyle;
-                     $('.map-style-button').removeClass('active');
-                     $(this).addClass('active');
-                 }
-             });
-             // Set initial active style button
-             // *** Changed: Make 'Streets' button active initially ***
-             $(`.map-style-button[data-style="${DEFAULT_MAP_STYLE}"]`).addClass('active');
-
-             // History/Favorites Modal Trigger
-             $('#history-favorites-button').on('click', () => {
-                 renderHistoryList(); // Ensure lists are up-to-date
-                 renderFavoritesList();
-                 $('#history-favorites-modal').modal('show');
-             });
-
-            // Delegated listeners for modal buttons
-            $('#history-favorites-modal').on('click', '.go-to-button', function() {
-                const item = $(this).closest('.item');
-                const lat = parseFloat(item.data('lat'));
-                const lng = parseFloat(item.data('lng'));
-                if (!isNaN(lat) && !isNaN(lng)) {
-                    map.flyTo({ center: { lat, lng }, zoom: 14 });
-                    handleMapClick({ lat, lng }); // Trigger lookup
-                    $('#history-favorites-modal').modal('hide'); // Close modal
-                }
-            });
-
-             $('#history-favorites-modal').on('click', '.remove-favorite-button', function() {
-                 const item = $(this).closest('.favorite-item');
-                 const lat = parseFloat(item.data('lat'));
-                 const lng = parseFloat(item.data('lng'));
-                  if (!isNaN(lat) && !isNaN(lng)) {
-                      if (confirm(`Are you sure you want to remove this favorite?`)) {
-                         removeFavorite(lat, lng);
-                      }
-                  }
-             });
-
-
-             // Delegated listeners for popup action buttons (important for dynamically added content)
-             $(document).on('click', '.save-favorite-button', function() {
-                 if (currentLocationData) {
-                     addLocationToFavorites(currentLocationData); // Use stored data
-                 } else {
-                     alert("Cannot save, location data is not available.");
-                 }
-             });
-
-             $(document).on('click', '.share-button', function() {
-                  if (currentLocationData) {
-                      const lat = currentLocationData.lat.toFixed(5);
-                      const lng = currentLocationData.lng.toFixed(5);
-                      const zoom = map.getZoom().toFixed(1);
-                      const shareUrl = `${window.location.origin}${window.location.pathname}?lat=${lat}&lng=${lng}&z=${zoom}`;
-                      // Use prompt or clipboard API
-                      prompt("Copy this link to share:", shareUrl);
-                      // Or use Clipboard API (better UX, needs HTTPS)
-                      /*
-                      if (navigator.clipboard) {
-                          navigator.clipboard.writeText(shareUrl).then(() => {
-                              alert('Share link copied to clipboard!');
-                          }, (err) => {
-                              prompt("Could not copy automatically. Copy this link:", shareUrl);
-                          });
-                      } else {
-                          prompt("Copy this link to share:", shareUrl);
-                      }
-                      */
-                  } else {
-                      alert("Cannot share, location data is not available.");
-                  }
-             });
-
+            // --- Event Listeners --- (Keep window resize, map click, geocoder result, style buttons, modal triggers/actions, popup buttons as before)
+            window.addEventListener('resize', calculateVh); window.addEventListener('orientationchange', calculateVh);
+            map.on('click', (e) => { if (e.originalEvent.target.closest('.mapboxgl-ctrl') || e.originalEvent.target.closest('.mapboxgl-popup')) return; handleMapClick(e.lngLat); });
+            geocoder.on('result', (e) => { if (e.result && e.result.center) { const [lng, lat] = e.result.center; map.flyTo({ center: [lng, lat], zoom: 14 }); map.once('moveend', () => { setTimeout(() => handleMapClick({ lng, lat }), 100); }); } });
+            $('.map-style-button').on('click', function() { const newStyle = $(this).data('style'); if (newStyle && newStyle !== currentMapStyle) { map.setStyle(newStyle); currentMapStyle = newStyle; $('.map-style-button').removeClass('active'); $(this).addClass('active'); } });
+            $(`.map-style-button[data-style="${DEFAULT_MAP_STYLE}"]`).addClass('active');
+            $('#history-favorites-button').on('click', () => { renderHistoryList(); renderFavoritesList(); $('#history-favorites-modal').modal('show'); });
+            $('#history-favorites-modal').on('click', '.go-to-button', function() { const item = $(this).closest('.item'); const lat = parseFloat(item.data('lat')); const lng = parseFloat(item.data('lng')); if (!isNaN(lat) && !isNaN(lng)) { map.flyTo({ center: { lat, lng }, zoom: 14 }); handleMapClick({ lat, lng }); $('#history-favorites-modal').modal('hide'); } });
+            $('#history-favorites-modal').on('click', '.remove-favorite-button', function() { const item = $(this).closest('.favorite-item'); const lat = parseFloat(item.data('lat')); const lng = parseFloat(item.data('lng')); if (!isNaN(lat) && !isNaN(lng)) { if (confirm(`Are you sure you want to remove this favorite?`)) removeFavorite(lat, lng); } });
+            $(document).on('click', '.save-favorite-button', function() { if (currentLocationData) addLocationToFavorites(currentLocationData); else alert("Cannot save, location data is not available."); });
+            $(document).on('click', '.share-button', function() { if (currentLocationData) { const lat = currentLocationData.lat.toFixed(5); const lng = currentLocationData.lng.toFixed(5); const zoom = map.getZoom().toFixed(1); const shareUrl = `${window.location.origin}${window.location.pathname}?lat=${lat}&lng=${lng}&z=${zoom}`; prompt("Copy this link to share:", shareUrl); } else { alert("Cannot share, location data is not available."); } });
+            // Print button listener remains the same - it just triggers browser print
              $(document).on('click', '.print-button', function() {
                  if (currentLocationData) {
-                     window.print(); // Trigger browser print using @media print styles
+                     window.print();
                  } else {
                       alert("Cannot print, location data is not available.");
                  }
