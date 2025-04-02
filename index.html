@@ -133,6 +133,12 @@
             max-width: calc(100% - 20px); /* Prevent overflow on small screens */
         }
 
+        /* *** NEW: Style for top-right controls (navigation) *** */
+        .mapboxgl-ctrl-top-right {
+            margin-top: calc(var(--menu-height) + 10px); /* Match top-left margin */
+        }
+
+
         /* Geocoder styling */
         .mapboxgl-ctrl-geocoder {
              font-size: 14px;
@@ -207,6 +213,7 @@
             #menu .item { font-size: 0.8rem; padding: .6em .8em; }
             #menu .right.menu { display: none; } /* Example: Hide right menu on mobile */
             .mapboxgl-ctrl-top-left { margin-top: calc(var(--menu-height) + 5px); } /* Reduce top margin */
+            .mapboxgl-ctrl-top-right { margin-top: calc(var(--menu-height) + 5px); } /* Reduce top margin on mobile too */
              .mapboxgl-ctrl-geocoder { max-width: 250px; } /* Shrink geocoder */
              .mapboxgl-popup-content { max-width: 280px; }
          }
@@ -222,7 +229,8 @@
                 <span class="item header active">Sales Tax Map</span> <!-- Use header class -->
                 <div class="item ui buttons map-style-buttons">
                     <button class="ui inverted button map-style-button" data-style="mapbox://styles/mapbox/satellite-streets-v11" title="Satellite + Streets">Satellite</button>
-                    <button class="ui inverted button map-style-button" data-style="mapbox://styles/mapbox/streets-v11" title="Streets">Streets</button>
+                    <!-- *** Changed: Streets button is now 'active' by default *** -->
+                    <button class="ui inverted button map-style-button active" data-style="mapbox://styles/mapbox/streets-v11" title="Streets">Streets</button>
                     <button class="ui inverted button map-style-button" data-style="mapbox://styles/mapbox/light-v10" title="Light">Light</button>
                     <button class="ui inverted button map-style-button" data-style="mapbox://styles/mapbox/dark-v10" title="Dark">Dark</button>
                 </div>
@@ -294,7 +302,8 @@
             const HISTORY_KEY = 'salesTaxMapHistory';
             const FAVORITES_KEY = 'salesTaxMapFavorites';
             const MAX_HISTORY_ITEMS = 10;
-            const DEFAULT_MAP_STYLE = 'mapbox://styles/mapbox/satellite-streets-v11';
+            // *** Changed: Default to streets-v11 for faster load ***
+            const DEFAULT_MAP_STYLE = 'mapbox://styles/mapbox/streets-v11';
 
             // --- State Variables ---
             let activePopup = null;
@@ -536,18 +545,19 @@
             mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
             map = new mapboxgl.Map({ // Assign to global `map` variable
                 container: 'map',
+                // *** Changed: Default map style to streets-v11 ***
                 style: currentMapStyle, // Use variable for initial style
                 center: [-98.5795, 39.8283],
                 zoom: 4
             });
 
             // --- Map Controls Init ---
-            map.addControl(new mapboxgl.NavigationControl());
+            map.addControl(new mapboxgl.NavigationControl(), 'top-right'); // Added 'top-right' position
             map.addControl(
                 new mapboxgl.GeolocateControl({
                     positionOptions: { enableHighAccuracy: true },
                     trackUserLocation: true
-                })
+                }), 'top-right' // Positioned top-right as well, will adjust via CSS
             );
              geocoder = new MapboxGeocoder({ // Assign to global `geocoder` variable
                  accessToken: mapboxgl.accessToken,
@@ -614,7 +624,8 @@
                  }
              });
              // Set initial active style button
-             $(`.map-style-button[data-style="${currentMapStyle}"]`).addClass('active');
+             // *** Changed: Make 'Streets' button active initially ***
+             $(`.map-style-button[data-style="${DEFAULT_MAP_STYLE}"]`).addClass('active');
 
              // History/Favorites Modal Trigger
              $('#history-favorites-button').on('click', () => {
